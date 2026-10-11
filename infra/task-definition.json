@@ -1,0 +1,55 @@
+{
+  "family": "modaviva-api",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::436847501474:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "modaviva-api",
+      "image": "436847501474.dkr.ecr.us-east-1.amazonaws.com/modaviva-api:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "DATABASE_HOST",
+          "value": "modaviva-db.cwr2eko8km1q.us-east-1.rds.amazonaws.com"
+        },
+        {
+          "name": "DATABASE_PORT",
+          "value": "5432"
+        },
+        {
+          "name": "DATABASE_NAME",
+          "value": "postgres"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "DATABASE_USER",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:436847501474:secret:rds!db-2f0d7713-1438-449b-a12f-a8665311812b-lXPyeF:username::"
+        },
+        {
+          "name": "DATABASE_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:436847501474:secret:rds!db-2f0d7713-1438-449b-a12f-a8665311812b-lXPyeF:password::"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/modaviva-api",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
