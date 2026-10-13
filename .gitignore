@@ -9,3 +9,10 @@ crash.log
 crash.*.log
 *.tfvars
 *.tfvars.json
+# Lambda local/deployment artifacts
+analytics/lambda_ingest/lambda-response*.json
+analytics/lambda_ingest/manifest*.json
+analytics/lambda_ingest/put-image-input.json
+analytics/lambda_ingest/lambda-policy.json
+analytics/lambda_ingest/lambda-trust-policy.json
+analytics/lambda_ingest/manifest-raw.txt
