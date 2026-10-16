@@ -16,3 +16,24 @@ analytics/lambda_ingest/put-image-input.json
 analytics/lambda_ingest/lambda-policy.json
 analytics/lambda_ingest/lambda-trust-policy.json
 analytics/lambda_ingest/manifest-raw.txt
+
+# Local AWS artifacts
+infra/task-definition-current.json
+infra/task-definition-register.json
+infra/postgres-client-task.json
+modaviva-aws-architecture - Atalho.lnk
+
+# Local analysis/config artifacts
+athena-config.json
+glue-partition.json
+glue-table.json
+
+# Local test/data artifacts
+data/product-images/
+analytics/lambda_ingest/payload-item-pedido.json
+lambda_function.py
+
+# Lambda curated local/test artifacts
+analytics/lambda_curated/fato_vendas_teste.parquet
+analytics/lambda_curated/lambda-response*.json
+

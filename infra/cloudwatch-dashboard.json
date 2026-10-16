@@ -1,0 +1,142 @@
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 0,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "title": "ECS - CPU",
+        "view": "timeSeries",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Average",
+        "metrics": [
+          [
+            "AWS/ECS",
+            "CPUUtilization",
+            "ClusterName",
+            "modaviva-cluster",
+            "ServiceName",
+            "modaviva-api-service"
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 8,
+      "y": 0,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "title": "ECS - Memoria",
+        "view": "timeSeries",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Average",
+        "metrics": [
+          [
+            "AWS/ECS",
+            "MemoryUtilization",
+            "ClusterName",
+            "modaviva-cluster",
+            "ServiceName",
+            "modaviva-api-service"
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 16,
+      "y": 0,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "title": "ALB - Hosts saudaveis",
+        "view": "timeSeries",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Average",
+        "metrics": [
+          [
+            "AWS/ApplicationELB",
+            "HealthyHostCount",
+            "TargetGroup",
+            "targetgroup/modaviva-api-tg/5b1a593199ede71c",
+            "LoadBalancer",
+            "app/modaviva-alb/5756d456952586e4"
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 6,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "title": "ALB - Requisicoes",
+        "view": "timeSeries",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Sum",
+        "metrics": [
+          [
+            "AWS/ApplicationELB",
+            "RequestCount",
+            "LoadBalancer",
+            "app/modaviva-alb/5756d456952586e4"
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 8,
+      "y": 6,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "title": "ALB - Erros 5xx",
+        "view": "timeSeries",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Sum",
+        "metrics": [
+          [
+            "AWS/ApplicationELB",
+            "HTTPCode_ELB_5XX_Count",
+            "LoadBalancer",
+            "app/modaviva-alb/5756d456952586e4"
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 16,
+      "y": 6,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "title": "ALB - Tempo de resposta",
+        "view": "timeSeries",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Average",
+        "metrics": [
+          [
+            "AWS/ApplicationELB",
+            "TargetResponseTime",
+            "LoadBalancer",
+            "app/modaviva-alb/5756d456952586e4"
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListAnalyticsBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::modaviva-analytics-436847501474"
+    },
+    {
+      "Sid": "ReadRawAnalyticsData",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::modaviva-analytics-436847501474/raw/*"
+    },
+    {
+      "Sid": "WriteCuratedAnalyticsData",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::modaviva-analytics-436847501474/curated/*"
+    }
+  ]
+}
