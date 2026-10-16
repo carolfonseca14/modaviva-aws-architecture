@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
-from database import get_connection
+from .database import get_connection
 import boto3
 import io
 
 app = FastAPI(title="ModaViva API")
-s3 = boto3.client("s3")
 
 PRODUCT_IMAGES_BUCKET = "modaviva-product-images-436847501474"
 
@@ -48,6 +47,8 @@ def load_test():
 
 @app.get("/products/{filename}")
 def get_product_image(filename: str):
+    s3 = boto3.client("s3")
+    
     response = s3.get_object(
         Bucket=PRODUCT_IMAGES_BUCKET,
         Key=f"products/{filename}"

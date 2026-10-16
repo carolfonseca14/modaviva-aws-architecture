@@ -1,6 +1,6 @@
 import psycopg
 
-from config import (
+from .config import (
     DATABASE_HOST,
     DATABASE_PORT,
     DATABASE_NAME,
