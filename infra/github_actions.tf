@@ -17,10 +17,8 @@ resource "aws_iam_role" "github_actions" {
         Condition = {
           StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-          }
-
-          StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:carolfonseca14/modaviva-aws-architecture:ref:refs/heads/main"
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+            "token.actions.githubusercontent.com:sub" = "repo:carolfonseca14@105356405/modaviva-aws-architecture@1414616204:ref:refs/heads/main"
           }
         }
       }
