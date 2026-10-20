@@ -1,0 +1,111 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+  ECR_REPOSITORY: modaviva-api
+  ECS_CLUSTER: modaviva-cluster
+  ECS_SERVICE: modaviva-api-service
+  ECS_TASK_FAMILY: modaviva-api
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/modaviva-github-actions
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$GITHUB_SHA \
+            .
+
+      - name: Push Docker image
+        run: |
+          docker push \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$GITHUB_SHA
+
+      - name: Download current task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition $ECS_TASK_FAMILY \
+            --query taskDefinition \
+            --output json > task-definition.json
+
+      - name: Update task definition image
+        run: |
+          python - <<'PY'
+          import json
+          import os
+
+          with open("task-definition.json") as f:
+              task = json.load(f)
+
+          image = (
+              f"{os.environ['AWS_ACCOUNT_ID']}.dkr.ecr."
+              f"{os.environ['AWS_REGION']}.amazonaws.com/"
+              f"{os.environ['ECR_REPOSITORY']}:{os.environ['GITHUB_SHA']}"
+          )
+
+          for container in task["containerDefinitions"]:
+              if container["name"] == "modaviva-api":
+                  container["image"] = image
+
+          for key in [
+              "taskDefinitionArn",
+              "revision",
+              "status",
+              "requiresAttributes",
+              "compatibilities",
+              "registeredAt",
+              "registeredBy"
+          ]:
+              task.pop(key, None)
+
+          with open("task-definition-deploy.json", "w") as f:
+              json.dump(task, f)
+
+          PY
+
+      - name: Register new task definition
+        id: task-definition
+        run: |
+          TASK_DEFINITION_ARN=$(aws ecs register-task-definition \
+            --cli-input-json file://task-definition-deploy.json \
+            --query 'taskDefinition.taskDefinitionArn' \
+            --output text)
+
+          echo "task_definition_arn=$TASK_DEFINITION_ARN" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE \
+            --task-definition ${{ steps.task-definition.outputs.task_definition_arn }}
+
+      - name: Wait for ECS deployment
+        run: |
+          aws ecs wait services-stable \
+            --cluster $ECS_CLUSTER \
+            --services $ECS_SERVICE
