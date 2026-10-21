@@ -37,3 +37,5 @@ lambda_function.py
 analytics/lambda_curated/fato_vendas_teste.parquet
 analytics/lambda_curated/lambda-response*.json
 
+infra/task-definition.json
+
