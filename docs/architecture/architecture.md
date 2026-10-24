@@ -1,6 +1,8 @@
 # Arquitetura AWS — ModaViva
 
-## Visão geral
+## Diagrama da arquitetura
+
+![Arquitetura AWS da ModaViva](./modaviva-architecture.drawio.png)
 
 ```mermaid
 flowchart TB
